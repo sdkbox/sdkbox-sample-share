@@ -1,0 +1,61 @@
+# view res/layout/dgts__activity_contacts.xml #generated:76
+# view res/layout/dgts__activity_failure.xml #generated:58
+-keep class com.digits.sdk.android.AccentButton { <init>(...); }
+
+# view res/layout/dgts__activity_contacts.xml #generated:33
+# view res/layout/dgts__activity_failure.xml #generated:32
+# view res/layout/dgts__activity_pin_code.xml #generated:38
+-keep class com.digits.sdk.android.AccentImageView { <init>(...); }
+
+# view res/layout/dgts__activity_pin_code.xml #generated:45
+-keep class com.digits.sdk.android.ColorPrimaryImageView { <init>(...); }
+
+# view res/layout/dgts__activity_phone_number.xml #generated:46
+-keep class com.digits.sdk.android.CountryListSpinner { <init>(...); }
+
+# view res/layout/dgts__activity_contacts.xml #generated:64
+-keep class com.digits.sdk.android.InvertedAccentButton { <init>(...); }
+
+# view res/layout/dgts__activity_confirmation.xml #generated:59
+# view res/layout/dgts__activity_failure.xml #generated:66
+-keep class com.digits.sdk.android.LinkTextView { <init>(...); }
+
+# view res/layout/dgts__activity_phone_number.xml #generated:31
+-keep class com.digits.sdk.android.LogoImageView { <init>(...); }
+
+# view res/layout/dgts__activity_confirmation.xml #generated:50
+# view res/layout/dgts__activity_phone_number.xml #generated:65
+# view res/layout/dgts__activity_pin_code.xml #generated:73
+-keep class com.digits.sdk.android.StateButton { <init>(...); }
+
+# view AndroidManifest.xml #generated:32
+-keep class com.twitter.sdk.android.tweetui.GalleryActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:28
+-keep class com.twitter.sdk.android.tweetui.PlayerActivity { <init>(...); }
+
+# view res/layout/tw__action_bar.xml #generated:28
+-keep class com.twitter.sdk.android.tweetui.ToggleImageButton { <init>(...); }
+
+# view res/layout/tw__action_bar.xml #generated:18
+-keep class com.twitter.sdk.android.tweetui.TweetActionBarView { <init>(...); }
+
+# view res/layout/tw__gallery_activity.xml #generated:22
+-keep class com.twitter.sdk.android.tweetui.internal.MultiTouchImageView { <init>(...); }
+
+# view res/layout/tw__tweet.xml #generated:25
+# view res/layout/tw__tweet_compact.xml #generated:71
+-keep class com.twitter.sdk.android.tweetui.internal.TweetMediaView { <init>(...); }
+
+# view res/layout/tw__player_activity.xml #generated:26
+-keep class com.twitter.sdk.android.tweetui.internal.VideoControlView { <init>(...); }
+
+# view res/layout/tw__player_activity.xml #generated:20
+-keep class com.twitter.sdk.android.tweetui.internal.VideoView { <init>(...); }
+
+# onClick res/layout/tw__activity_share_email.xml #generated:75
+-keepclassmembers class * { *** onClickAllow(...); }
+
+# onClick res/layout/tw__activity_share_email.xml #generated:62
+-keepclassmembers class * { *** onClickNotNow(...); }
+

@@ -1,0 +1,34 @@
+{
+    "android": {
+        "Facebook": {
+            "debug": false
+        }, 
+        "Share": {
+            "platforms": {
+                "Twitter": {
+                    "params": {
+                        "secret": "nlmUdPNcFGLWhyLu9cD794EDuDrVQnjd0YjTpB6sX8oHIQRrne", 
+                        "key": "EuovpLL0UhSGB7Jv5eKFJNMqO"
+                    }
+                }, 
+                "Facebook": {}
+            }
+        }
+    }, 
+    "ios": {
+        "Facebook": {
+            "debug": true
+        }, 
+        "Share": {
+            "platforms": {
+                "Twitter": {
+                    "params": {
+                        "secret": "haVcKarM96Sr4390XLQoHjyRUSyuHdkMX6letcc38h8TOWyiR9", 
+                        "key": "BUJTV6NEM7BAhhm82B12VbKGy"
+                    }
+                }, 
+                "Facebook": {}
+            }
+        }
+    }
+}

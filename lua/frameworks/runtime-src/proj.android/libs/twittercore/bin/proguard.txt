@@ -1,0 +1,12 @@
+# view AndroidManifest.xml #generated:28
+-keep class com.twitter.sdk.android.core.identity.OAuthActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:33
+-keep class com.twitter.sdk.android.core.identity.ShareEmailActivity { <init>(...); }
+
+# onClick res/layout/tw__activity_share_email.xml #generated:75
+-keepclassmembers class * { *** onClickAllow(...); }
+
+# onClick res/layout/tw__activity_share_email.xml #generated:62
+-keepclassmembers class * { *** onClickNotNow(...); }
+
