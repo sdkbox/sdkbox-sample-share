@@ -31,22 +31,29 @@ var HelloWorldLayer = cc.Layer.extend({
     },
 
     createTestMenu:function() {
+        sdkbox.PluginShare.init();
+        sdkbox.PluginShare.setListener({
+            onShareState: function(response) {
+                cc.log("PluginShare onSharestate:" + response.state + " error:" + response.error);
+                if (response.state == sdkbox.SocialShareState.SocialShareStateSuccess) {
+                    cc.log("post success");
+                }
+            }
+        })
+
         var menu = new cc.Menu();
 
-        var item1 = new cc.MenuItemLabel(new cc.LabelTTF("Test Item 1", "sans", 28), function() {
-            cc.log("Test Item 1");
+        var item1 = new cc.MenuItemLabel(new cc.LabelTTF("Share", "sans", 28), function() {
+            cc.log("Share");
+            var shareInfo = {};
+            shareInfo.text = "#sdkbox(www.sdkbox.com) - the cure for sdk fatigue - from js - ";
+            shareInfo.title = "sdkbox";
+            shareInfo.image = "http://www.sdkbox.com/assets/images/logo.png";
+            shareInfo.link = "http://www.sdkbox.com";
+            shareInfo.platform = sdkbox.SocialPlatform.Platform_Select;
+            sdkbox.PluginShare.share(shareInfo);
         });
         menu.addChild(item1);
-
-        var item2 = new cc.MenuItemLabel(new cc.LabelTTF("Test Item 2", "sans", 28), function() {
-            cc.log("Test Item 2");
-        });
-        menu.addChild(item2);
-
-        var item3 = new cc.MenuItemLabel(new cc.LabelTTF("Test Item 3", "sans", 28), function() {
-            cc.log("Test Item 3");
-        });
-        menu.addChild(item3);
 
         var winsize = cc.winSize;
         menu.x = winsize.width / 2;

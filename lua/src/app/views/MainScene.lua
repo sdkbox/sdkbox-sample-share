@@ -18,28 +18,27 @@ function MainScene:onCreate()
 end
 
 function MainScene:setupTestMenu()
+    sdkbox.PluginShare:init()
+    sdkbox.PluginShare:setListener(function(responsed)
+        dump(responsed)
+    end)
+
     local menu = cc.Menu:create()
 
-    local label1 = cc.Label:createWithSystemFont("Test Item 1", "sans", 28)
+    local label1 = cc.Label:createWithSystemFont("Share", "sans", 28)
     local item1 = cc.MenuItemLabel:create(label1)
     item1:onClicked(function()
-        print("Test Item 1")
+        print("Share")
+        local shareInfo = {}
+        shareInfo.text = '#sdkbox(www.sdkbox.com) - the cure for sdk fatigue - from lua - '
+        shareInfo.title = "sdkbox"
+        shareInfo.image = "http://www.sdkbox.com/assets/images/logo.png"
+        shareInfo.link = "http://www.sdkbox.com"
+        shareInfo.platform = sdkbox.SocialPlatform.Platform_Select
+        printf("sdkbox.SocialPlatform.Platform_Select = %s", tostring(sdkbox.SocialPlatform.Platform_Select))
+        sdkbox.PluginShare:share(shareInfo)
     end)
     menu:addChild(item1)
-
-    local label2 = cc.Label:createWithSystemFont("Test Item 2", "sans", 28)
-    local item2 = cc.MenuItemLabel:create(label2)
-    item2:onClicked(function()
-        print("Test Item 2")
-    end)
-    menu:addChild(item2)
-
-    local label3 = cc.Label:createWithSystemFont("Test Item 3", "sans", 28)
-    local item3 = cc.MenuItemLabel:create(label3)
-    item3:onClicked(function()
-        print("Test Item 3")
-    end)
-    menu:addChild(item3)
 
     menu:alignItemsVerticallyWithPadding(24)
     self:addChild(menu)

@@ -1,5 +1,6 @@
 
 #include "HelloWorldScene.h"
+#include "PluginShare/PluginShare.h"
 
 USING_NS_CC;
 
@@ -56,21 +57,68 @@ bool HelloWorld::init()
 
 void HelloWorld::createTestMenu()
 {
+    sdkbox::PluginShare::setListener(this);
+
     auto menu = Menu::create();
 
-    menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Test Item 1", "sans", 24), [](Ref*){
-        CCLOG("Test Item 1");
-    }));
-
-    menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Test Item 2", "sans", 24), [](Ref*){
-        CCLOG("Test Item 2");
-    }));
-
-    menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Test Item 3", "sans", 24), [](Ref*){
-        CCLOG("Test Item 3");
+    menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Share", "sans", 24), [](Ref*){
+        CCLOG("Share");
+        sdkbox::SocialShareInfo info;
+        info.text = "#sdkbox(www.sdkbox.com) - the cure for sdk fatigue ";
+        info.title = "sdkbox";
+        info.image = "http://www.sdkbox.com/assets/images/logo.png";
+        info.link = "http://www.sdkbox.com";
+        info.platform = sdkbox::SocialPlatform::Platform_Select;
+        sdkbox::PluginShare::share(info);
     }));
 
     menu->alignItemsVerticallyWithPadding(10);
     addChild(menu);
+}
+
+void HelloWorld::onShareState(const sdkbox::SocialShareResponse& response)
+{
+    switch (response.state) {
+        case sdkbox::SocialShareState::SocialShareStateNone: {
+            CCLOG("SharePlugin::onShareState none");
+            break;
+        }
+        case sdkbox::SocialShareState::SocialShareStateUnkonw: {
+            CCLOG("SharePlugin::onShareState unkonw");
+            break;
+        }
+        case sdkbox::SocialShareState::SocialShareStateBegin: {
+            CCLOG("SharePlugin::onShareState begin");
+            break;
+        }
+        case sdkbox::SocialShareState::SocialShareStateSuccess: {
+            CCLOG("SharePlugin::onShareState success");
+            break;
+        }
+        case sdkbox::SocialShareState::SocialShareStateFail: {
+            CCLOG("SharePlugin::onShareState fail, error:%s", response.error.c_str());
+            break;
+        }
+        case sdkbox::SocialShareState::SocialShareStateCancelled: {
+            CCLOG("SharePlugin::onShareState cancelled");
+            break;
+        }
+        case sdkbox::SocialShareStateSelectShow: {
+            CCLOG("SharePlugin::onShareState show pancel %d", response.platform);
+            break;
+        }
+        case sdkbox::SocialShareStateSelectCancelled: {
+            CCLOG("SharePlugin::onShareState show pancel cancelled %d", response.platform);
+            break;
+        }
+        case sdkbox::SocialShareStateSelected: {
+            CCLOG("SharePlugin::onShareState show pancel selected %d", response.platform);
+            break;
+        }
+        default: {
+            CCLOG("SharePlugin::onShareState");
+            break;
+        }
+    }
 }
 
