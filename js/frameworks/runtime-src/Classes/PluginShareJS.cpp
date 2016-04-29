@@ -180,8 +180,19 @@ JSBool js_PluginShareJS_PluginShare_setSharePanelCancel(JSContext *cx, uint32_t 
 bool js_PluginShareJS_PluginShare_init(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    bool ok = true;
     if (argc == 0) {
         bool ret = sdkbox::PluginShare::init();
+        jsval jsret = JSVAL_NULL;
+        jsret = BOOLEAN_TO_JSVAL(ret);
+        args.rval().set(jsret);
+        return true;
+    }
+    if (argc == 1) {
+        const char* arg0;
+        std::string arg0_tmp; ok &= jsval_to_std_string(cx, args.get(0), &arg0_tmp); arg0 = arg0_tmp.c_str();
+        JSB_PRECONDITION2(ok, cx, false, "js_PluginShareJS_PluginShare_init : Error processing arguments");
+        bool ret = sdkbox::PluginShare::init(arg0);
         jsval jsret = JSVAL_NULL;
         jsret = BOOLEAN_TO_JSVAL(ret);
         args.rval().set(jsret);
@@ -193,8 +204,20 @@ bool js_PluginShareJS_PluginShare_init(JSContext *cx, uint32_t argc, jsval *vp)
 #elif defined(JS_VERSION)
 JSBool js_PluginShareJS_PluginShare_init(JSContext *cx, uint32_t argc, jsval *vp)
 {
+    jsval *argv = JS_ARGV(cx, vp);
+    JSBool ok = JS_TRUE;
     if (argc == 0) {
         bool ret = sdkbox::PluginShare::init();
+        jsval jsret;
+        jsret = BOOLEAN_TO_JSVAL(ret);
+        JS_SET_RVAL(cx, vp, jsret);
+        return JS_TRUE;
+    }
+    if (argc == 1) {
+        const char* arg0;
+        std::string arg0_tmp; ok &= jsval_to_std_string(cx, argv[0], &arg0_tmp); arg0 = arg0_tmp.c_str();
+        JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+        bool ret = sdkbox::PluginShare::init(arg0);
         jsval jsret;
         jsret = BOOLEAN_TO_JSVAL(ret);
         JS_SET_RVAL(cx, vp, jsret);
