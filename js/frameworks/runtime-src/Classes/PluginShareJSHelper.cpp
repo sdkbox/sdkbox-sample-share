@@ -232,6 +232,7 @@ JSBool js_PluginShareJS_PluginShare_share(JSContext *cx, uint32_t argc, jsval *v
             shareInfo.title = map["title"].asString();
             shareInfo.image = map["image"].asString();
             shareInfo.link = map["link"].asString();
+            shareInfo.showDialog = map["showDialog"].asBool();
             shareInfo.platform = (sdkbox::SocialPlatform)map["platform"].asInt();
             sdkbox::PluginShare::share(shareInfo);
 

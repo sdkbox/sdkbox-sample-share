@@ -14,14 +14,20 @@ LOCAL_SRC_FILES := ../../Classes/AppDelegate.cpp \
 hellolua/main.cpp \
 ../../Classes/PluginShareLua.cpp \
 ../../Classes/PluginShareLuaHelper.cpp \
-../../Classes/SDKBoxLuaHelper.cpp
+../../Classes/SDKBoxLuaHelper.cpp \
+../../Classes/PluginFacebookLua.hpp \
+../../Classes/PluginFacebookLua.cpp \
+../../Classes/PluginFacebookLuaHelper.cpp \
+../../Classes/PluginFacebookLuaHelper.h \
+../../Classes/SDKBoxLuaHelper.h
 
 LOCAL_CPPFLAGS := -DSDKBOX_ENABLED
 LOCAL_LDLIBS := -landroid \
 -llog
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 LOCAL_WHOLE_STATIC_LIBRARIES := PluginShare \
-sdkbox
+sdkbox \
+PluginFacebook
 
 # _COCOS_HEADER_ANDROID_BEGIN
 # _COCOS_HEADER_ANDROID_END
@@ -39,6 +45,7 @@ $(call import-module,scripting/lua-bindings/proj.android/prebuilt-mk)
 $(call import-module,tools/simulator/libsimulator/proj.android/prebuilt-mk)
 $(call import-module, ./sdkbox)
 $(call import-module, ./pluginshare)
+$(call import-module, ./pluginfacebook)
 
 # _COCOS_LIB_IMPORT_ANDROID_BEGIN
 # _COCOS_LIB_IMPORT_ANDROID_END

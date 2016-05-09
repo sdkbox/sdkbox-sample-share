@@ -32,13 +32,28 @@ function MainScene:setupTestMenu()
         local shareInfo = {}
         shareInfo.text = '#sdkbox(www.sdkbox.com) - the cure for sdk fatigue - from lua - '
         shareInfo.title = "sdkbox"
-        shareInfo.image = "http://www.sdkbox.com/assets/images/logo.png"
+        -- shareInfo.image = "path to image";
         shareInfo.link = "http://www.sdkbox.com"
+        shareInfo.showDialog = false;
+        shareInfo.platform = sdkbox.SocialPlatform.Platform_Select
+        printf("sdkbox.SocialPlatform.Platform_Select = %s", tostring(sdkbox.SocialPlatform.Platform_Select))
+        sdkbox.PluginShare:share(shareInfo)
+    end)
+    local item2 = cc.MenuItemLabel:create(cc.Label:createWithSystemFont("Share Dialog", "sans", 28))
+    item2:onClicked(function()
+        print("Share")
+        local shareInfo = {}
+        shareInfo.text = '#sdkbox(www.sdkbox.com) - the cure for sdk fatigue - from lua - '
+        shareInfo.title = "sdkbox"
+        -- shareInfo.image = "path to image";
+        shareInfo.link = "http://www.sdkbox.com"
+        shareInfo.showDialog = true;
         shareInfo.platform = sdkbox.SocialPlatform.Platform_Select
         printf("sdkbox.SocialPlatform.Platform_Select = %s", tostring(sdkbox.SocialPlatform.Platform_Select))
         sdkbox.PluginShare:share(shareInfo)
     end)
     menu:addChild(item1)
+    menu:addChild(item2)
 
     menu:alignItemsVerticallyWithPadding(24)
     self:addChild(menu)

@@ -109,6 +109,7 @@ bool luaval_to_shareInfo(lua_State* L, int lo, sdkbox::SocialShareInfo* ret, con
     std::string key;
     std::string value;
     int intValue;
+    bool boolValue;
     while (lua_next(L, lo) != 0) {
         if (lua_isstring(L, -2)) {
             if (luaval_to_std_string(L, -2, &key)) {
@@ -120,6 +121,8 @@ bool luaval_to_shareInfo(lua_State* L, int lo, sdkbox::SocialShareInfo* ret, con
                     if (luaval_to_std_string(L, -1, &value)) { ret->image = value; }
                 } else if (0 == key.compare("link")) {
                     if (luaval_to_std_string(L, -1, &value)) { ret->link = value; }
+                } else if (0 == key.compare("showDialog")) {
+                    if (luaval_to_boolean(L, -1, &boolValue)) { ret->showDialog = boolValue; }
                 } else if (0 == key.compare("platform")) {
                     if (luaval_to_int32(L, -1, &intValue)) { ret->platform = (sdkbox::SocialPlatform)intValue; }
                 }
