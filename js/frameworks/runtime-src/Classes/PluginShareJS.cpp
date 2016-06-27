@@ -1,5 +1,4 @@
 #include "PluginShareJS.hpp"
-#include "cocos2d_specifics.hpp"
 #include "PluginShare/PluginShare.h"
 #include "SDKBoxJSHelper.h"
 #include "sdkbox/Sdkbox.h"

@@ -1,5 +1,4 @@
 #include "PluginFacebookJS.hpp"
-#include "cocos2d_specifics.hpp"
 #include "PluginFacebook/PluginFacebook.h"
 #include "SDKBoxJSHelper.h"
 #include "sdkbox/Sdkbox.h"

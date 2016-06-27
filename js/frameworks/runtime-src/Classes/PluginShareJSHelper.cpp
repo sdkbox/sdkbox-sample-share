@@ -1,9 +1,6 @@
 #include "PluginShareJSHelper.h"
-#include "cocos2d_specifics.hpp"
 #include "PluginShare/PluginShare.h"
 #include "SDKBoxJSHelper.h"
-
-#include "js_manual_conversions.h"
 
 jsval shareInfo_to_jsval(JSContext* cx, const sdkbox::SocialShareResponse& response) {
     JS::RootedObject proto(cx);
@@ -309,11 +306,14 @@ void share_register_constants(JSContext* cx, JSObject* obj)
     enums.insert(std::make_pair("SocialShareStateSelected", 7));
     enums.insert(std::make_pair("SocialShareStateSelectCancelled", 8));
     share_set_constants(cx, obj, "SocialShareState", enums);
-    
+
     enums.clear();
     enums.insert(std::make_pair("Platform_Unknow", 0));
     enums.insert(std::make_pair("Platform_Twitter", 1));
     enums.insert(std::make_pair("Platform_Facebook", 2));
+    enums.insert(std::make_pair("Platform_SMS", 5));
+    enums.insert(std::make_pair("Platform_EMail", 6));
+
     enums.insert(std::make_pair("Platform_Select", 3));
     enums.insert(std::make_pair("Platform_All", 4));
     share_set_constants(cx, obj, "SocialPlatform", enums);
