@@ -1,6 +1,5 @@
 #include "PluginShareLua.hpp"
 #include "PluginShare/PluginShare.h"
-#include "tolua_fix.h"
 #include "SDKBoxLuaHelper.h"
 #include "sdkbox/Sdkbox.h"
 
