@@ -56,8 +56,11 @@ JSOBJECT* FBInvitableFriendsInfoToJS( JSContext* cx, const sdkbox::FBInvitableFr
     return ret;
 }
 
-class FacebookListenerJsHelper : public sdkbox::FacebookListener
+class FacebookListenerJsHelper : public sdkbox::FacebookListener, public sdkbox::JSListenerBase
 {
+public:
+    FacebookListenerJsHelper():sdkbox::JSListenerBase() {
+    }
 
 private:
     void invokeDelegate(std::string& fName, jsval dataVal[], int argc) {
@@ -67,7 +70,7 @@ private:
         JSContext* cx = s_cx;
         const char* func_name = fName.c_str();
 
-        JS::RootedObject obj(cx, mJsDelegate);
+        JS::RootedObject obj(cx, getJSDelegate());
         JSAutoCompartment ac(cx, obj);
 
 #if MOZJS_MAJOR_VERSION >= 31
@@ -108,23 +111,7 @@ private:
         }
     }
 
-private:
-    JSObject* mJsDelegate;
-
 public:
-    void setJSDelegate(JSObject* delegate)
-    {
-        mJsDelegate = delegate;
-    }
-
-    JSObject* getJSDelegate()
-    {
-        return mJsDelegate;
-    }
-
-    FacebookListenerJsHelper() : mJsDelegate(0)
-    {
-    }
 
     virtual void onLogin(bool isLogin, const std::string& error)
     {
@@ -265,11 +252,10 @@ JSBool js_PluginFacebookJS_PluginFacebook_setListener(JSContext *cx, unsigned ar
         {
             ok = false;
         }
-        JSObject *tmpObj = args.get(0).toObjectOrNull();
 
         JSB_PRECONDITION2(ok, cx, false, "js_PluginFacebookJS_PluginFacebook_setListener : Error processing arguments");
         FacebookListenerJsHelper* lis = new FacebookListenerJsHelper();
-        lis->setJSDelegate(tmpObj);
+        lis->setJSDelegate(args.get(0));
         sdkbox::PluginFacebook::setListener(lis);
 
         args.rval().setUndefined();
