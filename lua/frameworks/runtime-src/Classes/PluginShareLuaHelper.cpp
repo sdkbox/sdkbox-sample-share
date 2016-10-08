@@ -256,6 +256,7 @@ int lua_PluginShareLua_constants(lua_State* L) {
     enums.insert(std::make_pair("Platform_Facebook", 2));
     enums.insert(std::make_pair("Platform_SMS", 5));
     enums.insert(std::make_pair("Platform_EMail", 6));
+    enums.insert(std::make_pair("Platform_Mail", 6));
 
     enums.insert(std::make_pair("Platform_Select", 3));
     enums.insert(std::make_pair("Platform_All", 4));
