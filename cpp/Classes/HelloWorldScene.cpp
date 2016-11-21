@@ -92,6 +92,16 @@ void HelloWorld::createTestMenu()
         sdkbox::PluginShare::share(info);
     }));
     
+    menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Share Native", "sans", 24), [this](Ref*){
+        sdkbox::SocialShareInfo info;
+        info.text = "#sdkbox(www.sdkbox.com) - the cure for sdk fatigue ";
+        info.title = "sdkbox";
+        info.image = this->_captureFilename;
+        info.link = "http://www.sdkbox.com";
+        
+        sdkbox::PluginShare::nativeShare(info);
+    }));
+    
     menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Capture Screen", "sans", 24), [this](Ref*){
         CCLOG("Capture screen");
 #if (COCOS2D_VERSION > 0x00030000)
