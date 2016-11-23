@@ -1,9 +1,13 @@
 #include "PluginShareJSHelper.h"
-#include "cocos2d_specifics.hpp"
 #include "PluginShare/PluginShare.h"
 #include "SDKBoxJSHelper.h"
 
-#include "js_manual_conversions.h"
+#if (COCOS2D_VERSION < 0x00030000)
+#define Ref CCObject
+#define Director CCDirector
+#define getInstance sharedDirector
+#define schedule scheduleSelector
+#endif
 
 jsval shareInfo_to_jsval(JSContext* cx, const sdkbox::SocialShareResponse& response) {
     JS::RootedObject proto(cx);
@@ -57,7 +61,7 @@ jsval shareInfo_to_jsval(JSContext* cx, const sdkbox::SocialShareResponse& respo
 extern JSObject* jsb_sdkbox_PluginShare_prototype;
 static JSContext* s_cx = nullptr;
 
-class ShareCallbackJS: public cocos2d::CCObject {
+class ShareCallbackJS: public cocos2d::Ref {
 public:
     ShareCallbackJS();
     void schedule();
@@ -71,16 +75,10 @@ public:
     sdkbox::SocialShareResponse _shareResponse;
 };
 
-class ShareListenerJS : public sdkbox::ShareListener {
-private:
-    JSObject* _JSDelegate;
+class ShareListenerJS : public sdkbox::ShareListener, public sdkbox::JSListenerBase
+{
 public:
-    void setJSDelegate(JSObject* delegate) {
-        _JSDelegate = delegate;
-    }
-
-    JSObject* getJSDelegate() {
-        return _JSDelegate;
+    ShareListenerJS():sdkbox::JSListenerBase() {
     }
 
     void onShareState(const sdkbox::SocialShareResponse& response) {
@@ -98,7 +96,7 @@ public:
         }
         JSContext* cx = s_cx;
         const char* func_name = func;
-        JS::RootedObject obj(cx, _JSDelegate);
+        JS::RootedObject obj(cx, getJSDelegate());
         JSAutoCompartment ac(cx, obj);
 
 #if defined(MOZJS_MAJOR_VERSION)
@@ -153,7 +151,7 @@ _paramLen(0) {
 
 void ShareCallbackJS::schedule() {
     retain();
-    cocos2d::CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(ShareCallbackJS::notityJs), this, 0.1, false);
+    cocos2d::Director::getInstance()->getScheduler()->schedule(schedule_selector(ShareCallbackJS::notityJs), this, 0.1, 0, 0.0f, false);
     autorelease();
 }
 
@@ -163,7 +161,6 @@ void ShareCallbackJS::notityJs(float dt) {
     if (l) {
         l->invokeJS(_name.c_str(), this);
     }
-    cocos2d::CCDirector::sharedDirector()->getScheduler()->unscheduleAllForTarget(this);
     release();
 }
 
@@ -196,11 +193,10 @@ JSBool js_PluginShareJS_PluginShare_setListener(JSContext *cx, uint32_t argc, js
         {
             ok = false;
         }
-        JSObject *tmpObj = args.get(0).toObjectOrNull();
 
         JSB_PRECONDITION2(ok, cx, false, "js_PluginShareJS_PluginShare_setIAPListener : Error processing arguments");
         ShareListenerJS* wrapper = new ShareListenerJS();
-        wrapper->setJSDelegate(tmpObj);
+        wrapper->setJSDelegate(args.get(0));
         sdkbox::PluginShare::setListener(wrapper);
 
         args.rval().setUndefined();
@@ -232,6 +228,7 @@ JSBool js_PluginShareJS_PluginShare_share(JSContext *cx, uint32_t argc, jsval *v
             shareInfo.title = map["title"].asString();
             shareInfo.image = map["image"].asString();
             shareInfo.link = map["link"].asString();
+            shareInfo.showDialog = map["showDialog"].asBool();
             shareInfo.platform = (sdkbox::SocialPlatform)map["platform"].asInt();
             sdkbox::PluginShare::share(shareInfo);
 
@@ -308,11 +305,15 @@ void share_register_constants(JSContext* cx, JSObject* obj)
     enums.insert(std::make_pair("SocialShareStateSelected", 7));
     enums.insert(std::make_pair("SocialShareStateSelectCancelled", 8));
     share_set_constants(cx, obj, "SocialShareState", enums);
-    
+
     enums.clear();
     enums.insert(std::make_pair("Platform_Unknow", 0));
     enums.insert(std::make_pair("Platform_Twitter", 1));
     enums.insert(std::make_pair("Platform_Facebook", 2));
+    enums.insert(std::make_pair("Platform_SMS", 5));
+    enums.insert(std::make_pair("Platform_EMail", 6));
+    enums.insert(std::make_pair("Platform_Mail", 6));
+
     enums.insert(std::make_pair("Platform_Select", 3));
     enums.insert(std::make_pair("Platform_All", 4));
     share_set_constants(cx, obj, "SocialPlatform", enums);

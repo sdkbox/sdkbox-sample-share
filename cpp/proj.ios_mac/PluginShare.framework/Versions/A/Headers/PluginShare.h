@@ -48,7 +48,7 @@ namespace sdkbox {
         /**
          *  initialize the plugin instance.
          */
-        static bool init();
+        static bool init(const char* jsonConfig = 0);
 
         /**
          * Set listener to listen for share events
@@ -79,6 +79,19 @@ namespace sdkbox {
          * Share content
          */
         static void share(const sdkbox::SocialShareInfo& info);
+
+        /**
+         * will use ios/android system share panel
+         *
+         * IOS:
+         * when trigger share success event, platform name will pass by error in sdkbox::SocialShareResponse
+         *
+         * Android:
+         * share success event will trigger, but this is not real share success, just show share panel success
+         * can't get real share success event on android
+         *
+         */
+        static void nativeShare(const sdkbox::SocialShareInfo& info);
 
         };
 

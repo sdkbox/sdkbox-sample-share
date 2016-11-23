@@ -15,14 +15,20 @@ LOCAL_SRC_FILES := ../../Classes/AppDelegate.cpp \
 hellojavascript/main.cpp \
 ../../Classes/PluginShareJS.cpp \
 ../../Classes/PluginShareJSHelper.cpp \
-../../Classes/SDKBoxJSHelper.cpp
+../../Classes/SDKBoxJSHelper.cpp \
+../../Classes/PluginFacebookJS.cpp \
+../../Classes/PluginFacebookJS.hpp \
+../../Classes/PluginFacebookJSHelper.cpp \
+../../Classes/PluginFacebookJSHelper.h \
+../../Classes/SDKBoxJSHelper.h
 
 LOCAL_CPPFLAGS := -DSDKBOX_ENABLED
 LOCAL_LDLIBS := -landroid \
 -llog
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 LOCAL_WHOLE_STATIC_LIBRARIES := PluginShare \
-sdkbox
+sdkbox \
+PluginFacebook
 
 LOCAL_STATIC_LIBRARIES := cocos2d_js_static
 LOCAL_STATIC_LIBRARIES += cocos2d_simulator_static
@@ -35,3 +41,4 @@ $(call import-module,scripting/js-bindings/proj.android/prebuilt-mk)
 $(call import-module,tools/simulator/libsimulator/proj.android/prebuilt-mk)
 $(call import-module, ./sdkbox)
 $(call import-module, ./pluginshare)
+$(call import-module, ./pluginfacebook)

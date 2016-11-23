@@ -1,8 +1,6 @@
 
 #include "PluginShareLuaHelper.h"
 #include "PluginShare/PluginShare.h"
-#include "CCLuaEngine.h"
-#include "tolua_fix.h"
 #include "SDKBoxLuaHelper.h"
 
 class ShareListenerLua : public sdkbox::ShareListener {
@@ -109,6 +107,7 @@ bool luaval_to_shareInfo(lua_State* L, int lo, sdkbox::SocialShareInfo* ret, con
     std::string key;
     std::string value;
     int intValue;
+    bool boolValue;
     while (lua_next(L, lo) != 0) {
         if (lua_isstring(L, -2)) {
             if (luaval_to_std_string(L, -2, &key)) {
@@ -120,6 +119,8 @@ bool luaval_to_shareInfo(lua_State* L, int lo, sdkbox::SocialShareInfo* ret, con
                     if (luaval_to_std_string(L, -1, &value)) { ret->image = value; }
                 } else if (0 == key.compare("link")) {
                     if (luaval_to_std_string(L, -1, &value)) { ret->link = value; }
+                } else if (0 == key.compare("showDialog")) {
+                    if (luaval_to_boolean(L, -1, &boolValue)) { ret->showDialog = boolValue; }
                 } else if (0 == key.compare("platform")) {
                     if (luaval_to_int32(L, -1, &intValue)) { ret->platform = (sdkbox::SocialPlatform)intValue; }
                 }
@@ -248,11 +249,15 @@ int lua_PluginShareLua_constants(lua_State* L) {
     enums.insert(std::make_pair("SocialShareStateSelected", 4));
     enums.insert(std::make_pair("SocialShareStateSelectCancelled", 5));
     lua_setTable(L, -1, "SocialShareState", enums);
-    
+
     enums.clear();
     enums.insert(std::make_pair("Platform_Unknow", 0));
     enums.insert(std::make_pair("Platform_Twitter", 1));
     enums.insert(std::make_pair("Platform_Facebook", 2));
+    enums.insert(std::make_pair("Platform_SMS", 5));
+    enums.insert(std::make_pair("Platform_EMail", 6));
+    enums.insert(std::make_pair("Platform_Mail", 6));
+
     enums.insert(std::make_pair("Platform_Select", 3));
     enums.insert(std::make_pair("Platform_All", 4));
     lua_setTable(L, -1, "SocialPlatform", enums);

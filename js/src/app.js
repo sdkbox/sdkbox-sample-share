@@ -43,17 +43,33 @@ var HelloWorldLayer = cc.Layer.extend({
 
         var menu = new cc.Menu();
 
+        var self = this
         var item1 = new cc.MenuItemLabel(new cc.LabelTTF("Share", "sans", 28), function() {
             cc.log("Share");
             var shareInfo = {};
             shareInfo.text = "#sdkbox(www.sdkbox.com) - the cure for sdk fatigue - from js - ";
             shareInfo.title = "sdkbox";
-            shareInfo.image = "http://www.sdkbox.com/assets/images/logo.png";
+            //shareInfo.image = "path to image path"
             shareInfo.link = "http://www.sdkbox.com";
             shareInfo.platform = sdkbox.SocialPlatform.Platform_Select;
+            shareInfo.showDialog = false;
             sdkbox.PluginShare.share(shareInfo);
         });
+
+        var item2 = new cc.MenuItemLabel(new cc.LabelTTF("Share Dialog", "sans", 28), function() {
+            cc.log("Share Dialog");
+            var shareInfo = {};
+            shareInfo.text = "#sdkbox(www.sdkbox.com) - the cure for sdk fatigue - from js - ";
+            shareInfo.title = "sdkbox";
+            //shareInfo.image = "path to image path"
+            shareInfo.link = "http://www.sdkbox.com";
+            shareInfo.platform = sdkbox.SocialPlatform.Platform_Select;
+            shareInfo.showDialog = true;
+            sdkbox.PluginShare.share(shareInfo);
+        });
+
         menu.addChild(item1);
+        menu.addChild(item2);
 
         var winsize = cc.winSize;
         menu.x = winsize.width / 2;

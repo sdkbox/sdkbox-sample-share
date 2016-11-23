@@ -28,6 +28,8 @@
 #import "AppDelegate.h"
 #import "RootViewController.h"
 
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+
 @implementation AppController
 
 #pragma mark -
@@ -84,9 +86,10 @@ static AppDelegate s_sharedApplication;
     cocos2d::GLView *glview = cocos2d::GLViewImpl::createWithEAGLView(eaglView);
     cocos2d::Director::getInstance()->setOpenGLView(glview);
 
+    BOOL ret = [[FBSDKApplicationDelegate sharedInstance] application:application
+                                        didFinishLaunchingWithOptions:launchOptions];
     app->run();
-
-    return YES;
+    return ret;
 }
 
 
@@ -99,12 +102,24 @@ static AppDelegate s_sharedApplication;
     /* cocos2d::Director::getInstance()->pause(); */
 }
 
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+    return [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                          openURL:url
+                                                sourceApplication:sourceApplication
+                                                       annotation:annotation];
+}
+
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
      //We don't need to call this method any more. It will interupt user defined game pause&resume logic
     /* cocos2d::Director::getInstance()->resume(); */
+
+    [FBSDKAppEvents activateApp];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {

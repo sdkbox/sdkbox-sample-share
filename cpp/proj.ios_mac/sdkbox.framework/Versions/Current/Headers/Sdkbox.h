@@ -7,7 +7,7 @@
 #ifndef _CC_SDKBOX_H_
 #define _CC_SDKBOX_H_
 
-#define SDKBOX_VERSION_STR  "sdkbox V2.1.3.3"
+#define SDKBOX_VERSION_STR  "sdkbox V2.3.6.1"
 
 /**
  * Only certain compilers support __attribute__((deprecated)).
@@ -28,6 +28,9 @@
  #include <string>
 
 namespace sdkbox {
+
+	// Use to specify a json config ahead of instantiation.
+	void setInitialConfig(const char* jsonConfig);
 
     void init( const char* application_token, const char* application_key, const char* store = "all", bool debug = false);
     void setProjectType(const char* project_type);
@@ -64,7 +67,7 @@ namespace sdkbox {
         ADTYPE_UNKNOWN
     };
 
-
+    std::string AdTrackingToString (AdActionType t);
     std::string  AdActionTypeToString( AdActionType t );
     AdActionType intToAdActionType( int v );
 
@@ -77,6 +80,11 @@ namespace sdkbox {
         Platform_Unknow = 0,
         Platform_Twitter = 1,
         Platform_Facebook = 2,
+        Platform_SMS = 5,
+        Platform_Mail = 6,
+        //Platform_EMail = Platform_Mail,
+        Platform_Native = 7,
+
         Platform_Select = 3,
         Platform_All = 4
     };
@@ -105,6 +113,7 @@ namespace sdkbox {
         std::string image;
         std::string link;
         SocialPlatform platform;
+        bool showDialog;
     };
 }
 

@@ -48,7 +48,7 @@ namespace sdkbox {
         /**
          *  initialize the plugin instance.
          */
-        static bool init();
+        static bool init(const char* jsonConfig = 0);
 
         /**
          * Set listener to listen for share events

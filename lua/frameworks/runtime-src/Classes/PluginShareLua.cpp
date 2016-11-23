@@ -1,6 +1,5 @@
 #include "PluginShareLua.hpp"
 #include "PluginShare/PluginShare.h"
-#include "tolua_fix.h"
 #include "SDKBoxLuaHelper.h"
 #include "sdkbox/Sdkbox.h"
 
@@ -101,6 +100,19 @@ int lua_PluginShareLua_PluginShare_init(lua_State* tolua_S)
             return 0;
         }
         bool ret = sdkbox::PluginShare::init();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    if (argc == 1)
+    {
+        const char* arg0;
+        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "sdkbox.PluginShare:init"); arg0 = arg0_tmp.c_str();
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_PluginShareLua_PluginShare_init'", nullptr);
+            return 0;
+        }
+        bool ret = sdkbox::PluginShare::init(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }

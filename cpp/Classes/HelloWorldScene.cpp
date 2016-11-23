@@ -30,6 +30,7 @@ bool HelloWorld::init()
     }
 
     CCLOG("Sample Startup");
+    _captureFilename = "";
 
     // add logo
     auto winsize = Director::getInstance()->getWinSize();
@@ -61,15 +62,55 @@ void HelloWorld::createTestMenu()
 
     auto menu = Menu::create();
 
-    menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Share", "sans", 24), [](Ref*){
+    menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Share", "sans", 24), [this](Ref*){
         CCLOG("Share");
+        if (0 == _captureFilename.length()) {
+            CCLOG("image path is empty, if you want to share image, press capture screen");
+        }
         sdkbox::SocialShareInfo info;
         info.text = "#sdkbox(www.sdkbox.com) - the cure for sdk fatigue ";
         info.title = "sdkbox";
-        info.image = "http://www.sdkbox.com/assets/images/logo.png";
+        info.image = this->_captureFilename;
         info.link = "http://www.sdkbox.com";
         info.platform = sdkbox::SocialPlatform::Platform_Select;
+        info.showDialog = false;
         sdkbox::PluginShare::share(info);
+    }));
+    
+    menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Share Dialog", "sans", 24), [this](Ref*){
+        CCLOG("Share Dialog");
+        if (0 == _captureFilename.length()) {
+            CCLOG("image path is empty, if you want to share image, press capture screen");
+        }
+        sdkbox::SocialShareInfo info;
+        info.text = "#sdkbox(www.sdkbox.com) - the cure for sdk fatigue ";
+        info.title = "sdkbox";
+        info.image = this->_captureFilename;
+        info.link = "http://www.sdkbox.com";
+        info.platform = sdkbox::SocialPlatform::Platform_Select;
+        info.showDialog = true;
+        sdkbox::PluginShare::share(info);
+    }));
+    
+    menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Share Native", "sans", 24), [this](Ref*){
+        sdkbox::SocialShareInfo info;
+        info.text = "#sdkbox(www.sdkbox.com) - the cure for sdk fatigue ";
+        info.title = "sdkbox";
+        info.image = this->_captureFilename;
+        info.link = "http://www.sdkbox.com";
+        
+        sdkbox::PluginShare::nativeShare(info);
+    }));
+    
+    menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Capture Screen", "sans", 24), [this](Ref*){
+        CCLOG("Capture screen");
+#if (COCOS2D_VERSION > 0x00030000)
+        std::string path = "screenshot.png";
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+        path = "/mnt/sdcard/screenshot.png";
+#endif
+        utils::captureScreen(CC_CALLBACK_2(HelloWorld::afterCaptureScreen, this), path);
+#endif
     }));
 
     menu->alignItemsVerticallyWithPadding(10);
@@ -119,6 +160,13 @@ void HelloWorld::onShareState(const sdkbox::SocialShareResponse& response)
             CCLOG("SharePlugin::onShareState");
             break;
         }
+    }
+}
+
+void HelloWorld::afterCaptureScreen(bool yes, const std::string &outputFilename) {
+    if (yes) {
+        CCLOG("SharePlugin capture screen success: %s", outputFilename.c_str());
+        _captureFilename = outputFilename;
     }
 }
 

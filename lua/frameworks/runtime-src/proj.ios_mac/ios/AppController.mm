@@ -31,6 +31,8 @@
 #import "RootViewController.h"
 #import "platform/ios/CCEAGLView-ios.h"
 
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+
 @implementation AppController
 
 #pragma mark -
@@ -59,7 +61,7 @@ static AppDelegate s_sharedApplication;
                                  numberOfSamples: 0 ];
 
     [eaglView setMultipleTouchEnabled:YES];
-    
+
     // Use RootViewController manage CCEAGLView
     viewController = [[RootViewController alloc] initWithNibName:nil bundle:nil];
     viewController.wantsFullScreenLayout = YES;
@@ -76,7 +78,7 @@ static AppDelegate s_sharedApplication;
         // use this method on ios6
         [window setRootViewController:viewController];
     }
-    
+
     [window makeKeyAndVisible];
 
     [[UIApplication sharedApplication] setStatusBarHidden: YES];
@@ -98,11 +100,22 @@ static AppDelegate s_sharedApplication;
     cocos2d::Director::getInstance()->pause();
 }
 
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+    return [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                          openURL:url
+                                                sourceApplication:sourceApplication
+                                                       annotation:annotation];
+}
+
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
     cocos2d::Director::getInstance()->resume();
+    [FBSDKAppEvents activateApp];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
