@@ -9,11 +9,15 @@
 #define schedule scheduleSelector
 #endif
 
-jsval shareInfo_to_jsval(JSContext* cx, const sdkbox::SocialShareResponse& response) {
+void shareInfo_to_jsval(JSContext* cx, const sdkbox::SocialShareResponse& response, JS::MutableHandleValue retValue) {
     JS::RootedObject proto(cx);
     JS::RootedObject parent(cx);
 #if defined(MOZJS_MAJOR_VERSION) and MOZJS_MAJOR_VERSION >= 26
+#if MOZJS_MAJOR_VERSION >= 52
+    JS::RootedObject jsRet(cx, JS_NewObject(cx, NULL));
+#else
     JS::RootedObject jsRet(cx, JS_NewObject(cx, NULL, proto, parent));
+#endif
 #else
     JSObject *jsRet = JS_NewObject(cx, NULL, NULL, NULL);
 #endif
@@ -23,7 +27,7 @@ jsval shareInfo_to_jsval(JSContext* cx, const sdkbox::SocialShareResponse& respo
 #else
     jsval state;
 #endif
-    state = int32_to_jsval(cx, response.state);
+    state = JS::Int32Value(response.state);
 #if defined(MOZJS_MAJOR_VERSION) and MOZJS_MAJOR_VERSION >= 26
     JS_SetProperty(cx, jsRet, "state", state);
 #else
@@ -35,7 +39,7 @@ jsval shareInfo_to_jsval(JSContext* cx, const sdkbox::SocialShareResponse& respo
 #else
     jsval errStr;
 #endif
-    errStr = std_string_to_jsval(cx, response.error);
+    errStr = SB_STR_TO_JSVAL(cx, response.error);
 #if defined(MOZJS_MAJOR_VERSION) and MOZJS_MAJOR_VERSION >= 26
     JS_SetProperty(cx, jsRet, "error", errStr);
 #else
@@ -48,14 +52,14 @@ jsval shareInfo_to_jsval(JSContext* cx, const sdkbox::SocialShareResponse& respo
 #else
     jsval platformInt;
 #endif
-    platformInt = INT_TO_JSVAL(response.platform);
+    platformInt = JS::Int32Value(response.platform);
 #if defined(MOZJS_MAJOR_VERSION) and MOZJS_MAJOR_VERSION >= 26
     JS_SetProperty(cx, jsRet, "platform", platformInt);
 #else
     JS_SetProperty(cx, jsRet, "platform", &platformInt);
 #endif
 
-    return OBJECT_TO_JSVAL(jsRet);
+    retValue.set(JS::ObjectValue(*jsRet.get()));
 }
 
 extern JSObject* jsb_sdkbox_PluginShare_prototype;
@@ -66,11 +70,11 @@ public:
     ShareCallbackJS();
     void schedule();
     void notityJs(float dt);
-    int transParams(jsval** pp);
+    int transParams(JS::Value** pp);
 
     std::string _name;
 
-    jsval _paramVal[2];
+    JS::Value _paramVal[2];
     int _paramLen;
     sdkbox::SocialShareResponse _shareResponse;
 };
@@ -115,14 +119,14 @@ public:
         jsval func_handle;
 #endif
         int valueSize = 0;
-        jsval* pVals = nullptr;
+        JS::Value* pVals = nullptr;
         valueSize = cb->transParams(&pVals);
 
         if (JS_HasProperty(cx, obj, func_name, &hasAction) && hasAction) {
             if(!JS_GetProperty(cx, obj, func_name, &func_handle)) {
                 return;
             }
-            if(func_handle == JSVAL_VOID) {
+            if(func_handle == JS::NullValue()) {
                 return;
             }
 
@@ -164,9 +168,11 @@ void ShareCallbackJS::notityJs(float dt) {
     release();
 }
 
-int ShareCallbackJS::transParams(jsval** pp) {
+int ShareCallbackJS::transParams(JS::Value** pp) {
     JSContext* cx = s_cx;
-    _paramVal[0] = shareInfo_to_jsval(cx, _shareResponse);
+    JS::RootedValue jsShareInfo(cx);
+    shareInfo_to_jsval(cx, _shareResponse, &jsShareInfo);
+    _paramVal[0] = jsShareInfo;
 
     *pp = _paramVal;
     return _paramLen;
@@ -175,7 +181,7 @@ int ShareCallbackJS::transParams(jsval** pp) {
 
 #if defined(MOZJS_MAJOR_VERSION)
 #if MOZJS_MAJOR_VERSION >= 33
-bool js_PluginShareJS_PluginShare_setListener(JSContext *cx, uint32_t argc, jsval *vp)
+bool js_PluginShareJS_PluginShare_setListener(JSContext *cx, uint32_t argc, JS::Value *vp)
 #else
 bool js_PluginShareJS_PluginShare_setListener(JSContext *cx, uint32_t argc, jsval *vp)
 #endif
@@ -196,19 +202,19 @@ JSBool js_PluginShareJS_PluginShare_setListener(JSContext *cx, uint32_t argc, js
 
         JSB_PRECONDITION2(ok, cx, false, "js_PluginShareJS_PluginShare_setIAPListener : Error processing arguments");
         ShareListenerJS* wrapper = new ShareListenerJS();
-        wrapper->setJSDelegate(args.get(0));
+        wrapper->setJSDelegate(cx, args.get(0));
         sdkbox::PluginShare::setListener(wrapper);
 
         args.rval().setUndefined();
         return true;
     }
-    JS_ReportError(cx, "js_PluginShareJS_PluginShare_setIAPListener : wrong number of arguments");
+    JS_ReportErrorUTF8(cx, "js_PluginShareJS_PluginShare_setIAPListener : wrong number of arguments");
     return false;
 }
 
 #if defined(MOZJS_MAJOR_VERSION)
 #if MOZJS_MAJOR_VERSION >= 33
-bool js_PluginShareJS_PluginShare_share(JSContext *cx, uint32_t argc, jsval *vp)
+bool js_PluginShareJS_PluginShare_share(JSContext *cx, uint32_t argc, JS::Value *vp)
 #else
 bool js_PluginShareJS_PluginShare_share(JSContext *cx, uint32_t argc, jsval *vp)
 #endif
@@ -236,7 +242,41 @@ JSBool js_PluginShareJS_PluginShare_share(JSContext *cx, uint32_t argc, jsval *v
         }
     } while (0);
 
-    JS_ReportError(cx, "js_PluginShareJS_PluginShare_share : wrong number of arguments");
+    JS_ReportErrorUTF8(cx, "js_PluginShareJS_PluginShare_share : wrong number of arguments");
+    return false;
+}
+
+#if defined(MOZJS_MAJOR_VERSION)
+#if MOZJS_MAJOR_VERSION >= 33
+bool js_PluginShareJS_PluginShare_nativeShare(JSContext *cx, uint32_t argc, JS::Value *vp)
+#else
+bool js_PluginShareJS_PluginShare_nativeShare(JSContext *cx, uint32_t argc, jsval *vp)
+#endif
+#elif defined(JS_VERSION)
+JSBool js_PluginShareJS_PluginShare_nativeShare(JSContext *cx, uint32_t argc, jsval *vp)
+#endif
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    bool ok = true;
+
+    do {
+        if (argc == 1) {
+            sdkbox::SocialShareInfo shareInfo;
+            cocos2d::ValueMap map;
+            ok &= jsval_to_ccvaluemap(cx, args.get(0), &map);
+            shareInfo.text = map["text"].asString();
+            shareInfo.title = map["title"].asString();
+            shareInfo.image = map["image"].asString();
+            shareInfo.link = map["link"].asString();
+            shareInfo.showDialog = map["showDialog"].asBool();
+            shareInfo.platform = (sdkbox::SocialPlatform)map["platform"].asInt();
+            sdkbox::PluginShare::nativeShare(shareInfo);
+
+            return true;
+        }
+    } while (0);
+
+    JS_ReportErrorUTF8(cx, "js_PluginShareJS_PluginShare_nativeShare : wrong number of arguments");
     return false;
 }
 
@@ -266,7 +306,7 @@ JSBool js_PluginShareJS_PluginShare_share(JSContext *cx, uint32_t argc, jsval *v
 //         }
 //     } while (0);
 
-//     JS_ReportError(cx, "js_PluginShareJS_PluginShare_shareDialog : wrong number of arguments");
+//     JS_ReportErrorUTF8(cx, "js_PluginShareJS_PluginShare_shareDialog : wrong number of arguments");
 //     return false;
 // }
 
@@ -276,7 +316,8 @@ void share_set_constants(JSContext* cx, const JS::RootedObject& obj, const std::
 void share_set_constants(JSContext* cx, JSObject* obj, const std::string& name, const std::map<std::string, int>& params)
 #endif
 {
-    jsval val = sdkbox::std_map_string_int_to_jsval(cx, params);
+    JS::RootedValue val(cx);
+    sdkbox::std_map_string_int_to_jsval(cx, params, &val);
 
     JS::RootedValue rv(cx);
     rv = val;
@@ -313,6 +354,7 @@ void share_register_constants(JSContext* cx, JSObject* obj)
     enums.insert(std::make_pair("Platform_SMS", 5));
     enums.insert(std::make_pair("Platform_EMail", 6));
     enums.insert(std::make_pair("Platform_Mail", 6));
+    enums.insert(std::make_pair("Platform_Native", 7));
 
     enums.insert(std::make_pair("Platform_Select", 3));
     enums.insert(std::make_pair("Platform_All", 4));
@@ -328,6 +370,7 @@ void register_all_PluginShareJS_helper(JSContext* cx, JS::HandleObject global) {
 
     JS_DefineFunction(cx, pluginObj, "setListener", js_PluginShareJS_PluginShare_setListener, 1, JSPROP_READONLY | JSPROP_PERMANENT);
     JS_DefineFunction(cx, pluginObj, "share", js_PluginShareJS_PluginShare_share, 1, JSPROP_READONLY | JSPROP_PERMANENT);
+    JS_DefineFunction(cx, pluginObj, "nativeShare", js_PluginShareJS_PluginShare_nativeShare, 1, JSPROP_READONLY | JSPROP_PERMANENT);
     // JS_DefineFunction(cx, pluginObj, "shareDialog", js_PluginShareJS_PluginShare_shareDialog, 1, JSPROP_READONLY | JSPROP_PERMANENT);
 
     sdkbox::getJsObjOrCreat(cx, global, "sdkbox", &pluginObj);
@@ -340,6 +383,7 @@ void register_all_PluginShareJS_helper(JSContext* cx, JSObject* global) {
 
     JS_DefineFunction(cx, pluginObj, "setListener", js_PluginShareJS_PluginShare_setListener, 1, JSPROP_READONLY | JSPROP_PERMANENT);
     JS_DefineFunction(cx, pluginObj, "share", js_PluginShareJS_PluginShare_share, 1, JSPROP_READONLY | JSPROP_PERMANENT);
+    JS_DefineFunction(cx, pluginObj, "nativeShare", js_PluginShareJS_PluginShare_nativeShare, 1, JSPROP_READONLY | JSPROP_PERMANENT);
     // JS_DefineFunction(cx, pluginObj, "shareDialog", js_PluginShareJS_PluginShare_shareDialog, 1, JSPROP_READONLY | JSPROP_PERMANENT);
 
     share_register_constants(cx, pluginObj);
@@ -353,6 +397,7 @@ void register_all_PluginShareJS_helper(JSContext* cx, JSObject* global) {
 
     JS_DefineFunction(cx, pluginObj, "setListener", js_PluginShareJS_PluginShare_setListener, 1, JSPROP_READONLY | JSPROP_PERMANENT);
     JS_DefineFunction(cx, pluginObj, "share", js_PluginShareJS_PluginShare_share, 1, JSPROP_READONLY | JSPROP_PERMANENT);
+    JS_DefineFunction(cx, pluginObj, "nativeShare", js_PluginShareJS_PluginShare_nativeShare, 1, JSPROP_READONLY | JSPROP_PERMANENT);
     // JS_DefineFunction(cx, pluginObj, "shareDialog", js_PluginShareJS_PluginShare_shareDialog, 1, JSPROP_READONLY | JSPROP_PERMANENT);
 
     share_register_constants(cx, pluginObj);

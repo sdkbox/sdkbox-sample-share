@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		175B47DD894C315A14BDFD69 /* Bolts.framework */ = {isa = PBXBuildFile; fileRef = 1AC54565B06C8E86F7715011 /* Bolts.framework */; };
 		1A82F5FB169AC92500C4B13A /* libsqlite3.dylib */ = {isa = PBXBuildFile; fileRef = 1A82F5FA169AC92500C4B13A /* libsqlite3.dylib */; };
 		1AD7E0A818C9DB93004817A6 /* main.js */ = {isa = PBXBuildFile; fileRef = 1A6BF21418C9DB5900FB0E1C /* main.js */; };
 		1AE159EC18C9DF3600FCA372 /* project.json */ = {isa = PBXBuildFile; fileRef = 1A1A081B18C9DF05005C6854 /* project.json */; };
@@ -89,6 +90,7 @@
 		1A6BF21418C9DB5900FB0E1C /* main.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = main.js; path = ../../../main.js; sourceTree = "<group>"; };
 		1A82F5FA169AC92500C4B13A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = compiled.mach-o.dylib; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		1A96A4F2174A3432008653A9 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = "$(SRCROOT)/../../../../../sdkbox-cocos2d-x-binary/cocos2dx/platform/third_party/ios/libraries/libcurl.a"; sourceTree = "<group>"; };
+		1AC54565B06C8E86F7715011 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = Bolts.framework; sourceTree = SOURCE_ROOT; };
 		20174FF585245DDCAC8FC422 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = TwitterKit.framework/Resources/TwitterKitResources.bundle/fa.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		25314D7F96A5964397743D54 /* libjscocos2d iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjscocos2d iOS.a"; path = "$(SRCROOT)/../../../../../sdkbox-cocos2d-x-binary/prebuilt/ios/libjscocos2d iOS.a"; sourceTree = "<absolute>"; };
 		25C04CFBA1974B5A9A4069AE /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/GameController.framework; sourceTree = DEVELOPER_DIR; };
@@ -257,6 +259,7 @@
 				D8F74ED0B87FE9C165AA1DC8 /* FBSDKLoginKit.framework */,
 				F8C848328DB39EBD38611171 /* FBSDKShareKit.framework */,
 				535149FB9126ACA9DCF3885F /* AdSupport.framework */,
+				175B47DD894C315A14BDFD69 /* Bolts.framework */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,6 +375,7 @@
 				EDE44F01A371180E41193ACA /* FBSDKLoginKit.framework */,
 				2BAC490A9C1D00640B13F9A1 /* FBSDKShareKit.framework */,
 				A9B84F319C3083F5AE091CCF /* AdSupport.framework */,
+				1AC54565B06C8E86F7715011 /* Bolts.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -613,7 +617,9 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SRCROOT)\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ios/Prefix.pch;
@@ -640,6 +646,7 @@
 					"\"FBSDKCoreKit.framework\"",
 					"\"FBSDKLoginKit.framework\"",
 					"\"FBSDKShareKit.framework\"",
+					"\"Bolts.framework\"",
 				);
 				OTHER_CFLAGS = -DSDKBOX_ENABLED;
 				OTHER_LDFLAGS = " -ObjC";
@@ -657,7 +664,9 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SRCROOT)\"",
+				);
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ios/Prefix.pch;
@@ -684,6 +693,7 @@
 					"\"FBSDKCoreKit.framework\"",
 					"\"FBSDKLoginKit.framework\"",
 					"\"FBSDKShareKit.framework\"",
+					"\"Bolts.framework\"",
 				);
 				OTHER_CFLAGS = -DSDKBOX_ENABLED;
 				OTHER_LDFLAGS = " -ObjC";
