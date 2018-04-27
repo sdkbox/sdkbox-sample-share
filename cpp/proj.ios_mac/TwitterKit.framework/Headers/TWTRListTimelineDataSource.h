@@ -1,14 +1,25 @@
-//
-//  TWTRListTimelineDataSource.h
-//  TwitterKit
-//
-//  Copyright (c) 2015 Twitter. All rights reserved.
-//
+/*
+ * Copyright (C) 2017 Twitter, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 
 #import <Foundation/Foundation.h>
 #import <TwitterKit/TWTRTimelineDataSource.h>
 
 @class TWTRAPIClient;
+@class TWTRTimelineFilter;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -37,14 +48,19 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  The number of Tweets to request in each query to the Twitter Timeline API when fetching the next batch of Tweets. Will request 30 Tweets by default. Setting this value to 0 will use the server default.
  */
-@property (nonatomic, assign, readonly) NSUInteger maxTweetsPerRequest;
+@property (nonatomic, readonly) NSUInteger maxTweetsPerRequest;
 
 /**
  *  Whether to request retweets in the set of Tweets from the server.
  *
  *  Defaults to YES.
  */
-@property (nonatomic, assign, readonly) BOOL includeRetweets;
+@property (nonatomic, readonly) BOOL includeRetweets;
+
+/*
+ *  A filtering object that hides certain tweets.
+ */
+@property (nonatomic, copy, nullable) TWTRTimelineFilter *timelineFilter;
 
 /**
  *  Convenience initializer. Uses default values for `maxTweetsPerRequest` and `includeRetweets`.
@@ -79,9 +95,9 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return A fully initialized list timeline datasource.
  */
-- (instancetype)initWithListID:(NSString * __twtr_nullable)listID listSlug:(NSString * __twtr_nullable)listSlug listOwnerScreenName:(NSString * __twtr_nullable)listOwnerScreenName APIClient:(TWTRAPIClient *)client maxTweetsPerRequest:(NSUInteger)maxTweetsPerRequest includeRetweets:(BOOL)includeRetweets NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithListID:(nullable NSString *)listID listSlug:(nullable NSString *)listSlug listOwnerScreenName:(nullable NSString *)listOwnerScreenName APIClient:(TWTRAPIClient *)client maxTweetsPerRequest:(NSUInteger)maxTweetsPerRequest includeRetweets:(BOOL)includeRetweets NS_DESIGNATED_INITIALIZER;
 
-- (instancetype)init __unavailable;
+- (instancetype)init NS_UNAVAILABLE;
 
 @end
 

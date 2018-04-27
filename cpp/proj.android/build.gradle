@@ -1,0 +1,60 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
+
+    defaultConfig {
+        applicationId "com.sdkbox.sample.share.cpp"
+        minSdkVersion 14
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+    }
+
+    sourceSets.main {
+        aidl.srcDir "src"
+        java.srcDir "src"
+        res.srcDir "res"
+        jniLibs.srcDir "libs"
+        manifest.srcFile "AndroidManifest.xml"
+        assets.srcDir "assets"
+    }
+
+    signingConfigs {
+
+       release {
+            if (project.hasProperty("RELEASE_STORE_FILE")) {
+                storeFile file(RELEASE_STORE_FILE)
+                storePassword RELEASE_STORE_PASSWORD
+                keyAlias RELEASE_KEY_ALIAS
+                keyPassword RELEASE_KEY_PASSWORD
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            if (project.hasProperty("RELEASE_STORE_FILE")) {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs',
+            include: ['*.jar'],
+            excludes: ['converter-gson-2.1.0.jar',
+                       'gson-2.7.jar',
+                       'okhttp-3.4.2.jar',
+                       'okio-1.9.0.jar',
+                       'picasso-2.5.2.jar',
+                       'retrofit-2.1.0.jar',
+                       'twitter-text-1.14.3.jar'])
+    implementation 'com.twitter.sdk.android:twitter-core:3.1.1'
+    implementation 'com.twitter.sdk.android:tweet-composer:3.1.1'
+    implementation project(':lib_facebook')
+}

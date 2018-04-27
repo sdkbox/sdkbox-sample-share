@@ -84,7 +84,7 @@ namespace sdkbox {
          * will use ios/android system share panel
          *
          * IOS:
-         * when trigger share success event, platform name will pass by error in sdkbox::SocialShareResponse
+         * when trigger share success event, action name will pass by error in sdkbox::SocialShareResponse
          *
          * Android:
          * share success event will trigger, but this is not real share success, just show share panel success

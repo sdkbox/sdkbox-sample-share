@@ -1,0 +1,16 @@
+include ':app'
+project(':app').projectDir = new File(settingsDir, '../proj.android')
+
+include ':lib_facebook'
+project(':lib_facebook').projectDir = new File(settingsDir, '../proj.android/libs/facebook_lib')
+
+// include ':plugin_share'
+// project(':plugin_share').projectDir = new File(settingsDir, '../../../plugins/share/proj.android')
+
+// include ':lib_sdkbox'
+// project(':lib_sdkbox').projectDir = new File(settingsDir, '../../../csc/protocols/proj.android')
+
+// include ':lib_gps'
+// project(':lib_gps').projectDir = new File(settingsDir, '../../../extern/plugins/googleplayservices/googleplayservices/plugin/gps')
+
+

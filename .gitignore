@@ -13,6 +13,7 @@ cpp/proj.android/obj/
 cpp/proj.android/bin/
 cpp/proj.android/gen/
 cpp/proj.android/libs/
+cpp/proj.android/build/
 cpp/proj.android/libs/share_lib/local.properties
 cpp/proj.android/libs/share_lib/proguard-project.txt
 cpp/proj.android/libs/share_lib/bin/
