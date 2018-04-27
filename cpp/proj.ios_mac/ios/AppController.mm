@@ -29,6 +29,7 @@
 #import "RootViewController.h"
 
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <TwitterKit/TWTRKit.h>
 
 @implementation AppController
 
@@ -100,6 +101,12 @@ static AppDelegate s_sharedApplication;
      */
      //We don't need to call this method any more. It will interupt user defined game pause&resume logic
     /* cocos2d::Director::getInstance()->pause(); */
+}
+
+- (BOOL)application:(UIApplication *)app
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
+    return [[Twitter sharedInstance] application:app openURL:url options:options];
 }
 
 - (BOOL)application:(UIApplication *)application
