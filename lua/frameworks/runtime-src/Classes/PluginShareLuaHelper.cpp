@@ -171,6 +171,42 @@ tolua_lerror:
     return 0;
 }
 
+int lua_PluginShareLua_PluginShare_nativeShare(lua_State* tolua_S) {
+    int argc = 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"sdkbox.PluginShare",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1) {
+#if COCOS2D_DEBUG >= 1
+        if (!tolua_istable(tolua_S, 2, 0, &tolua_err)) {
+            goto tolua_lerror;
+        }
+#endif
+        sdkbox::SocialShareInfo shareInfo;
+        if (!luaval_to_shareInfo(tolua_S, 2, &shareInfo, "sdkbox.PluginShare:nativeShare")) {
+            return 0;
+        }
+        sdkbox::PluginShare::nativeShare(shareInfo);
+
+        return 0;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "sdkbox.PluginShare::nativeShare",argc, 1);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_PluginShareLua_PluginShare_nativeShare'.",&tolua_err);
+#endif
+    return 0;
+}
+
 // int lua_PluginShareLua_PluginShare_shareDialog(lua_State* tolua_S) {
 //     int argc = 0;
 
@@ -257,6 +293,7 @@ int lua_PluginShareLua_constants(lua_State* L) {
     enums.insert(std::make_pair("Platform_SMS", 5));
     enums.insert(std::make_pair("Platform_EMail", 6));
     enums.insert(std::make_pair("Platform_Mail", 6));
+    enums.insert(std::make_pair("Platform_Native", 7));
 
     enums.insert(std::make_pair("Platform_Select", 3));
     enums.insert(std::make_pair("Platform_All", 4));
@@ -275,6 +312,7 @@ int extern_PluginShare(lua_State* L) {
     if (lua_istable(L,-1)) {
         tolua_function(L,"setListener", lua_PluginShareLua_PluginShare_setListener);
         tolua_function(L,"share", lua_PluginShareLua_PluginShare_share);
+        tolua_function(L,"nativeShare", lua_PluginShareLua_PluginShare_nativeShare);
         // tolua_function(L,"shareDialog", lua_PluginShareLua_PluginShare_shareDialog);
     }
      lua_pop(L, 1);

@@ -80,6 +80,19 @@ namespace sdkbox {
          */
         static void share(const sdkbox::SocialShareInfo& info);
 
+        /**
+         * will use ios/android system share panel
+         *
+         * IOS:
+         * when trigger share success event, action name will pass by error in sdkbox::SocialShareResponse
+         *
+         * Android:
+         * share success event will trigger, but this is not real share success, just show share panel success
+         * can't get real share success event on android
+         *
+         */
+        static void nativeShare(const sdkbox::SocialShareInfo& info);
+
         };
 
     class ShareListener {

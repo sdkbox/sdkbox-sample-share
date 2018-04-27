@@ -1,17 +1,31 @@
-//
-//  TWTRUser.h
-//
-//  Copyright (c) 2015 Twitter. All rights reserved.
-//
+/*
+ * Copyright (C) 2017 Twitter, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 
 #import <Foundation/Foundation.h>
+#import <TwitterKit/TWTRJSONConvertible.h>
+
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  Represents a user on Twitter.
  */
-@interface TWTRUser : NSObject <NSCoding, NSCopying>
+@interface TWTRUser : NSObject <NSCoding, NSCopying, TWTRJSONConvertible>
 
-# pragma mark - Properties
+#pragma mark - Properties
 
 /**
  *  The ID of the Twitter User.
@@ -35,12 +49,12 @@
 /**
  *  Whether the user has been verified by Twitter.
  */
-@property (nonatomic, assign, readonly) BOOL isVerified;
+@property (nonatomic, readonly) BOOL isVerified;
 
 /**
  *  Whether the user is protected.
  */
-@property (nonatomic, assign, readonly) BOOL isProtected;
+@property (nonatomic, readonly) BOOL isProtected;
 
 /**
  *  The HTTPS URL of the user's profile image.
@@ -67,24 +81,6 @@
  */
 @property (nonatomic, copy, readonly) NSURL *profileURL;
 
-# pragma mark - Init
-
-/**
- *  Creates a Twitter user object from the dictionary of Twitter API JSON response.
- *
- *  @param dictionary A parsed dictionary of a single Twitter Tweet API JSON response.
- *
- *  @return An initialized TWTRUser instance.
- */
-- (instancetype)initWithJSONDictionary:(NSDictionary *)dictionary;
-
-/**
- *  Creates an array of Twitter User instances from the array of Twitter API JSON response.
- *
- *  @param array A parsed array of Twitter User API JSON responses.
- *
- *  @return An array of initialized TWTRTweet instances.
- */
-+ (NSArray *)usersWithJSONArray:(NSArray *)array;
-
 @end
+
+NS_ASSUME_NONNULL_END

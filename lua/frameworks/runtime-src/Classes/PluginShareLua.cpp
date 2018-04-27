@@ -148,12 +148,39 @@ int lua_register_PluginShareLua_PluginShare(lua_State* tolua_S)
 TOLUA_API int register_all_PluginShareLua(lua_State* tolua_S)
 {
 	tolua_open(tolua_S);
-	
-	tolua_module(tolua_S,"sdkbox",0);
-	tolua_beginmodule(tolua_S,"sdkbox");
+
+	std::stringstream ss("sdkbox");
+    std::vector<std::string> nsvec;
+    std::string item;
+    while (std::getline(ss, item, '.')) {
+        nsvec.push_back(item);
+    }
+    int nsLen = nsvec.size();
+    item = nsvec.front();
+    nsvec.erase(nsvec.begin());
+
+    tolua_module(tolua_S, item.c_str(), 0);
+    tolua_beginmodule(tolua_S, item.c_str());
+
+    while (nsvec.size() > 0) {
+        item = nsvec.front();
+        nsvec.erase(nsvec.begin());
+        lua_pushstring(tolua_S, item.c_str()); // m name
+        lua_rawget(tolua_S, -2);             // m value
+        if (!lua_istable(tolua_S, -1)) {
+            lua_pop(tolua_S, 1);             // m
+            lua_newtable(tolua_S);           // m t
+            lua_pushstring(tolua_S, item.c_str()); // m t name
+            lua_pushvalue(tolua_S, -2);      // m t name t
+            lua_rawset(tolua_S, -4);         // m t
+        }
+    }
 
 	lua_register_PluginShareLua_PluginShare(tolua_S);
 
+	if (nsLen > 1) {
+        lua_pop(tolua_S, nsLen - 1); // m
+    }
 	tolua_endmodule(tolua_S);
 
 	sdkbox::setProjectType("lua");

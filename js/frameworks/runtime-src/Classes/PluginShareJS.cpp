@@ -204,14 +204,9 @@ void js_PluginShareJS_PluginShare_finalize(JSFreeOp *fop, JSObject *obj) {
 #if defined(MOZJS_MAJOR_VERSION)
 #if MOZJS_MAJOR_VERSION >= 33
 void js_register_PluginShareJS_PluginShare(JSContext *cx, JS::HandleObject global) {
-    static JSClass PluginAgeCheq_class = {
-        "PluginShare",
-        JSCLASS_HAS_PRIVATE,
-        nullptr
-    };
-    jsb_sdkbox_PluginShare_class = &PluginAgeCheq_class;
-
 #if MOZJS_MAJOR_VERSION < 52
+    jsb_sdkbox_PluginShare_class = (JSClass *)calloc(1, sizeof(JSClass));
+    jsb_sdkbox_PluginShare_class->name = "PluginShare";
     jsb_sdkbox_PluginShare_class->addProperty = JS_PropertyStub;
     jsb_sdkbox_PluginShare_class->delProperty = JS_DeletePropertyStub;
     jsb_sdkbox_PluginShare_class->getProperty = JS_PropertyStub;
@@ -221,6 +216,13 @@ void js_register_PluginShareJS_PluginShare(JSContext *cx, JS::HandleObject globa
     jsb_sdkbox_PluginShare_class->convert = JS_ConvertStub;
     jsb_sdkbox_PluginShare_class->finalize = js_PluginShareJS_PluginShare_finalize;
     jsb_sdkbox_PluginShare_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
+#else
+    static JSClass PluginShare_class = {
+        "PluginShare",
+        JSCLASS_HAS_PRIVATE,
+        nullptr
+    };
+    jsb_sdkbox_PluginShare_class = &PluginShare_class;
 #endif
 
     static JSPropertySpec properties[] = {

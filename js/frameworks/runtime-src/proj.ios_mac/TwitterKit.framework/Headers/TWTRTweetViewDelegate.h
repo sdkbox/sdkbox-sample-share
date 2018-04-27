@@ -1,14 +1,26 @@
-//
-//  TWTRTweetViewDelegate.h
-//
-//  Copyright (c) 2015 Twitter. All rights reserved.
-//
+/*
+ * Copyright (C) 2017 Twitter, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 
 #import <UIKit/UIKit.h>
+#import "TWTRVideoPlaybackState.h"
 
 @class TWTRSession;
-@class TWTRTweetView;
 @class TWTRTweet;
+@class TWTRTweetView;
 @class TWTRUser;
 @protocol TWTRSessionStore;
 
@@ -18,7 +30,7 @@ typedef void (^TWTRAuthenticationCompletionHandler)(id<TWTRSessionStore> session
 
 /**
  Delegate for `TWTRTweetView` to receive updates on the user interacting with this particular Tweet view.
- 
+
     // Create the tweet view
     TWTRTweetView *tweetView = [[TWTRTweetView alloc] initWithTweet:tweet];
     // Set the delegate
@@ -27,15 +39,6 @@ typedef void (^TWTRAuthenticationCompletionHandler)(id<TWTRSessionStore> session
 @protocol TWTRTweetViewDelegate <NSObject>
 
 @optional
-
-/**
- *  The tweet view was tapped. Implement to show your own webview if desired using the `permalinkURL` property on the `TWTRTweet` object passed in.
- *  If this method is not implemented and the device is running on iOS 9+ we will deep link into the Twitter application.
- *
- *  @param tweetView The Tweet view that was tapped.
- *  @param tweet     The Tweet model object being shown.
- */
-- (void)tweetView:(TWTRTweetView *)tweetView didSelectTweet:(TWTRTweet *)tweet;
 
 /**
  *  The tweet view image was tapped.
@@ -65,7 +68,7 @@ typedef void (^TWTRAuthenticationCompletionHandler)(id<TWTRSessionStore> session
 
 /**
  *  Called when the user's profile image is tapped.
- *  If this method is not implemented and the device is running on iOS 9+ we will deep link into the Twitter application.
+ *  If this method is not implemented, the default behavior is to deep link into Twitter application or twitter.com in a webview.
  *
  *  @param tweetView The Tweet view that was tapped.
  *  @param user The Twitter user.
@@ -73,76 +76,21 @@ typedef void (^TWTRAuthenticationCompletionHandler)(id<TWTRSessionStore> session
 - (void)tweetView:(TWTRTweetView *)tweetView didTapProfileImageForUser:(TWTRUser *)user;
 
 /**
- *  The Tweet view "Share" button was tapped and the `UIActivityViewController` was shown.
+ *  Called when the Tweet is tapped.
+ *  If this method is not implemented, the default behavior is to deep link into Twitter application or twitter.com in a webview.
  *
  *  @param tweetView The Tweet view that was tapped.
- *  @param tweet     The Tweet model object being shown.
+ *  @param tweet The Tweet that user tapped.
  */
-- (void)tweetView:(TWTRTweetView *)tweetView willShareTweet:(TWTRTweet *)tweet;
+- (void)tweetView:(TWTRTweetView *)tweetView didTapTweet:(TWTRTweet *)tweet;
 
 /**
- *  The share action for a Tweet was completed.
+ *  Called when video in the Tweet changes its state.
  *
  *  @param tweetView The Tweet view that was tapped.
- *  @param tweet     The Tweet model object being shown.
- *  @param shareType The share action that was completed. (e.g. `UIActivityTypePostToFacebook`, `UIActivityTypePostToTwitter`, or `UIActivityTypeMail`)
+ *  @param newState The state of the video. (TWTRVideoPlaybackStatePaused, TWTRVideoPlaybackStatePlaying, TWTRVideoPlaybackStateCompleted)
  */
-- (void)tweetView:(TWTRTweetView *)tweetView didShareTweet:(TWTRTweet *)tweet withType:(NSString *)shareType;
-
-/**
- *  The share action for a Tweet was cancelled.
- *
- *  @param tweetView The Tweet view handling the share action.
- *  @param tweet     The Tweet model object represented.
- */
-- (void)tweetView:(TWTRTweetView *)tweetView cancelledShareTweet:(TWTRTweet *)tweet;
-
-/**
- *  The Tweet view favorite button was tapped and the action was completed with
- *  the Twitter API.
- *
- *  @param tweetView The Tweet view showing this Tweet object.
- *  @param tweet     The Tweet model that was just liked.
- */
-- (void)tweetView:(TWTRTweetView *)tweetView didLikeTweet:(TWTRTweet *)tweet;
-
-/**
- *  The Tweet view unfavorite button was tapped and the action was completed with
- *  the Twitter API.
- *
- *  @param tweetView The Tweet view showing this Tweet object.
- *  @param tweet     The Tweet model object that was just unliked.
- */
-- (void)tweetView:(TWTRTweetView *)tweetView didUnlikeTweet:(TWTRTweet *)tweet;
-
-/**
- *  Requests authentication from the delegate to use for a network request that requires user context.
- *
- *  @param tweetView                        The Tweet view showing this Tweet object.
- *  @param authenticationCompletionHandler  The completion block that your delegate method must call to provide the necessary
- *                                          user context e.g. user session.
- */
-- (void)tweetView:(TWTRTweetView *)tweetView willRequireAuthenticationCompletionHandler:(TWTRAuthenticationCompletionHandler)authenticationCompletionHandler;
-
-#pragma mark - Deprecated
-
-/**
- *  The Tweet view favorite button was tapped and the action was completed with
- *  the Twitter API.
- *
- *  @param tweetView The Tweet view showing this Tweet object.
- *  @param tweet     The Tweet model that was just favorited.
- */
-- (void)tweetView:(TWTRTweetView *)tweetView didFavoriteTweet:(TWTRTweet *)tweet __attribute__((deprecated("Use `tweetView:didLikeTweet:`.")));
-
-/**
- *  The Tweet view unfavorite button was tapped and the action was completed with
- *  the Twitter API.
- *
- *  @param tweetView The Tweet view showing this Tweet object.
- *  @param tweet     The Tweet model object that was just unfavorited.
- */
-- (void)tweetView:(TWTRTweetView *)tweetView didUnfavoriteTweet:(TWTRTweet *)tweet __attribute__((deprecated("Use `tweetView:didUnlikeTweet:`.")));
+- (void)tweetView:(TWTRTweetView *)tweetView didChangePlaybackState:(TWTRVideoPlaybackState)newState;
 
 @end
 
