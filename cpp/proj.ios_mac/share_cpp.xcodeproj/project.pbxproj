@@ -52,7 +52,6 @@
 		A5B94F70AAC2468B7383AB6F /* PluginFacebook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5D4F43BB909951317FED9D /* PluginFacebook.framework */; };
 		AF16486EB8757220999AAAD2 /* sdkbox_config.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D6247BBB40DBAB21ED71898 /* sdkbox_config.json */; };
 		B0564609A71028717290A170 /* PluginShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 558D4D62A7AE0799DA1A76B0 /* PluginShare.framework */; };
-		B6834DE6AB4BEDD5C185090B /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5442ED82EB7D555F84EBF6 /* Fabric.framework */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
 		BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1C47EA1293683800B63C5D /* QuartzCore.framework */; };
@@ -77,7 +76,6 @@
 		04A54985A66F579A8C08B0F4 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = TwitterKit.framework/TwitterKitResources.bundle/el.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		06CA439FAE2FEEC3FB3FEF24 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/GameController.framework; sourceTree = DEVELOPER_DIR; };
 		0A384490916F91CD41A3BB41 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = TwitterKit.framework/Resources/TwitterKitResources.bundle/el.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
-		0E5442ED82EB7D555F84EBF6 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = SOURCE_ROOT; };
 		0F47429BAC2FA1424D46B2E0 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = TwitterKit.framework/Resources/TwitterKitResources.bundle/de.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		10CF47B694092E1F77A5B076 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = TwitterKit.framework/Resources/TwitterKitResources.bundle/sk.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		179F44A496B6E27DF1BF8E4B /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "TwitterKit.framework/TwitterKitResources.bundle/zh-Hant.lproj/Localizable.strings"; sourceTree = SOURCE_ROOT; };
@@ -254,7 +252,6 @@
 				4AF24228B721699D68B0EB58 /* libcocos2d iOS.a in Frameworks */,
 				F233420BA71E7F3CB6F3A1B6 /* sdkbox.framework in Frameworks */,
 				B0564609A71028717290A170 /* PluginShare.framework in Frameworks */,
-				B6834DE6AB4BEDD5C185090B /* Fabric.framework in Frameworks */,
 				6C394EB3B00D822E5BFFA8B3 /* TwitterCore.framework in Frameworks */,
 				EE5047078F1696DC0C75DFA8 /* TwitterKit.framework in Frameworks */,
 				24074420AA8B83F86F12FB14 /* Accounts.framework in Frameworks */,
@@ -340,7 +337,6 @@
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				B4A64A00B5C6E60E62EE26DD /* sdkbox.framework */,
 				558D4D62A7AE0799DA1A76B0 /* PluginShare.framework */,
-				0E5442ED82EB7D555F84EBF6 /* Fabric.framework */,
 				28904EEB9081FD2E445E172C /* TwitterCore.framework */,
 				FDFF4E9C924563BC223E0D93 /* TwitterKit.framework */,
 				27624967B3323FE10751775D /* Accounts.framework */,
