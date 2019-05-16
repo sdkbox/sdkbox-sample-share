@@ -52,8 +52,19 @@ function MainScene:setupTestMenu()
         printf("sdkbox.SocialPlatform.Platform_Select = %s", tostring(sdkbox.SocialPlatform.Platform_Select))
         sdkbox.PluginShare:share(shareInfo)
     end)
+
+    local item3 = cc.MenuItemLabel:create(cc.Label:createWithSystemFont("Native Share", "sans", 28))
+    item3:onClicked(function()
+        print("Share")
+        local shareInfo = {}
+        shareInfo.text = '#sdkbox(www.sdkbox.com) - the cure for sdk fatigue - from lua - '
+        shareInfo.title = "sdkbox"
+        sdkbox.PluginShare:nativeShare(shareInfo)
+    end)
+
     menu:addChild(item1)
     menu:addChild(item2)
+    menu:addChild(item3)
 
     menu:alignItemsVerticallyWithPadding(24)
     self:addChild(menu)
